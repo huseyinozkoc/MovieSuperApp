@@ -131,4 +131,7 @@ dependencies {
     implementation(libs.androidx.work.runtime.ktx)
     //Chucker
     debugImplementation("com.github.chuckerteam.chucker:library:4.0.0")
+
+    //Lottie
+    implementation(libs.lottie.compose)
 }

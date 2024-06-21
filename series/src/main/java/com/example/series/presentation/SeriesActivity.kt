@@ -11,8 +11,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
+import com.example.series.R
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -30,11 +36,19 @@ class SeriesActivity : ComponentActivity() {
 @Composable
 fun SeriesList(viewModel: SeriesViewModel) {
     val seriesState = viewModel.series.collectAsState()
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading))
     Box(modifier = Modifier.fillMaxSize()) {
         when {
             seriesState.value.isLoading -> {
-                Text(text = "Loading...", modifier = Modifier.align(Alignment.Center))
+                LottieAnimation(
+                    composition = composition,
+                    iterations = LottieConstants.IterateForever,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .align(Alignment.Center)
+                )
             }
+
             seriesState.value.series != null -> {
                 LazyColumn {
                     items(seriesState.value.series!!) { series ->
@@ -42,6 +56,7 @@ fun SeriesList(viewModel: SeriesViewModel) {
                     }
                 }
             }
+
             seriesState.value.error != null -> {
                 // Display error UI
             }
