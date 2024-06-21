@@ -22,12 +22,21 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.Icon
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -56,35 +65,73 @@ class MoviesActivity : ComponentActivity() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MovieList(viewModel: MoviesViewModel) {
     val moviesState = viewModel.movies.collectAsState()
-
+    val searchQuery = remember { mutableStateOf("") }
+    val selectedGenre = remember { mutableStateOf("All") }
 
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading))
 
     Box(modifier = Modifier.fillMaxSize()) {
-        when {
-            moviesState.value.isLoading -> {
-                LottieAnimation(
-                    composition = composition,
-                    iterations = LottieConstants.IterateForever,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .align(Alignment.Center)
+        Column {
+            TextField(
+                value = searchQuery.value,
+                onValueChange = { searchQuery.value = it },
+                label = { Text("Search") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+                    .clip(RoundedCornerShape(16.dp)),
+                leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search Icon", tint = Color.Black) },
+                colors = TextFieldDefaults.colors(
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
                 )
-            }
+            )
 
-            moviesState.value.movies != null -> {
-                LazyColumn {
-                    items(moviesState.value.movies!!) { movie ->
-                        MovieCard(movie = movie)
-                    }
+            Row(
+                modifier = Modifier
+                    .horizontalScroll(rememberScrollState())
+                    .padding(start = 8.dp)
+            ) {
+                val genres = listOf("All") + viewModel.getGenres()
+                genres.forEach { genre ->
+                    FilterChip(
+                        onClick = { selectedGenre.value = genre },
+                        label = { Text(genre) },
+                        selected = selectedGenre.value == genre
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
                 }
             }
 
-            moviesState.value.error != null -> {
-                // Display error UI
+            when {
+                moviesState.value.isLoading -> {
+                    LottieAnimation(
+                        composition = composition,
+                        iterations = LottieConstants.IterateForever,
+                        modifier = Modifier
+                            .fillMaxSize()
+                    )
+                }
+
+                moviesState.value.movies != null -> {
+                    val filteredMovies = moviesState.value.movies!!.filter { movie ->
+                        movie.title.contains(searchQuery.value, ignoreCase = true) &&
+                                (selectedGenre.value == "All" || movie.genre.contains(selectedGenre.value))
+                    }
+                    LazyColumn {
+                        items(filteredMovies) { movie ->
+                            MovieCard(movie = movie)
+                        }
+                    }
+                }
+
+                moviesState.value.error != null -> {
+                    // Display error UI
+                }
             }
         }
     }

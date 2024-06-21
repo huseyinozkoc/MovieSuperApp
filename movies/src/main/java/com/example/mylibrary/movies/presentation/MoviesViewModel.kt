@@ -22,6 +22,10 @@ class MoviesViewModel @Inject constructor(
     init {
         fetchMovies()
     }
+    fun getGenres(): List<String> {
+        val movies = _movies.value.movies
+        return movies?.flatMap { it.genre }?.distinct() ?: emptyList()
+    }
 
     private fun fetchMovies() {
         _movies.value = MoviesViewState(isLoading = true)
