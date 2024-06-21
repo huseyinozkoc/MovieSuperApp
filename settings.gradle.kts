@@ -22,3 +22,4 @@ dependencyResolutionManagement {
 rootProject.name = "MultiModule"
 include(":app")
 include(":movies")
+include(":series")
