@@ -143,12 +143,16 @@ fun MovieList(viewModel: MoviesViewModel) {
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                 Text(
                                     text = "No Search Result! :(",
-                                    style = TextStyle(fontSize = 27.sp, fontWeight = FontWeight.Bold, color = Color.Black),
+                                    style = TextStyle(
+                                        fontSize = 27.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = Color.Black
+                                    ),
                                     textAlign = TextAlign.Center,
-                                     modifier = Modifier.padding(top = 128.dp)
+                                    modifier = Modifier.padding(top = 64.dp)
                                 )
                                 Image(
-                                    painter = rememberAsyncImagePainter(model = R.drawable.noresult),
+                                    painter = rememberAsyncImagePainter(model = R.drawable.error),
                                     contentScale = ContentScale.Fit,
                                     contentDescription = "No Results Image",
                                     modifier = Modifier
@@ -179,7 +183,32 @@ fun MovieList(viewModel: MoviesViewModel) {
                 }
 
                 moviesState.value.error != null -> {
-                    // Display error UI
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(
+                                text = "An Error Occurred in Network! :(",
+                                style = TextStyle(
+                                    fontSize = 27.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.Black
+                                ),
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.padding(top = 64.dp)
+                            )
+                            Image(
+                                painter = rememberAsyncImagePainter(model = R.drawable.errornetwork),
+                                contentScale = ContentScale.Fit,
+                                contentDescription = "Error Image",
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .fillMaxHeight(1f)
+                                    .padding(8.dp),
+                            )
+                        }
+                    }
                 }
             }
         }
