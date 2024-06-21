@@ -129,4 +129,7 @@ dependencies {
 
     // WorkManager
     implementation(libs.androidx.work.runtime.ktx)
+
+    //Chucker
+    debugImplementation("com.github.chuckerteam.chucker:library:4.0.0")
 }

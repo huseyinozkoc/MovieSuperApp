@@ -1,8 +1,8 @@
-package com.example.mylibrary.movies.di
+package com.example.series.di
 
 import android.content.Context
 import com.chuckerteam.chucker.api.ChuckerInterceptor
-import com.example.mylibrary.movies.data.source.remote.MovieService
+import com.example.series.data.SeriesService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,8 +20,8 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    @Named("MoviesOkHttp")
-    fun provideOkHttpClientForMovies(@ApplicationContext context: Context): OkHttpClient {
+    @Named("SeriesOkHttp")
+    fun provideOkHttpClientForSeries(@ApplicationContext context: Context): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(ChuckerInterceptor(context))
             .addInterceptor { chain ->
@@ -36,14 +36,14 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    @Named("MoviesRetrofit")
-    fun provideRetrofitForMovies(@Named("MoviesOkHttp") okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
-        .baseUrl("https://imdb-top-100-movies.p.rapidapi.com/")
+    @Named("SeriesRetrofit")
+    fun provideRetrofitForSeries(@Named("SeriesOkHttp") okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
+        .baseUrl("https://imdb-top-100-series.p.rapidapi.com/")
         .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
     @Provides
     @Singleton
-    fun provideMovieService(@Named("MoviesRetrofit") retrofit: Retrofit): MovieService = retrofit.create(MovieService::class.java)
+    fun provideSeriesService(@Named("SeriesRetrofit") retrofit: Retrofit): SeriesService = retrofit.create(SeriesService::class.java)
 }

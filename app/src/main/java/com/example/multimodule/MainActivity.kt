@@ -17,7 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.multimodule.ui.theme.MultiModuleTheme
 import com.example.mylibrary.movies.presentation.MoviesActivity
-import com.example.series.SeriesActivity
+import com.example.series.presentation.SeriesActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
