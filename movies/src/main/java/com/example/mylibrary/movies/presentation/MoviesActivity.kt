@@ -4,6 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
@@ -11,6 +14,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -42,8 +46,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
@@ -84,7 +91,13 @@ fun MovieList(viewModel: MoviesViewModel) {
                     .fillMaxWidth()
                     .padding(8.dp)
                     .clip(RoundedCornerShape(16.dp)),
-                leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search Icon", tint = Color.Black) },
+                leadingIcon = {
+                    Icon(
+                        Icons.Default.Search,
+                        contentDescription = "Search Icon",
+                        tint = Color.Black
+                    )
+                },
                 colors = TextFieldDefaults.colors(
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
@@ -122,9 +135,45 @@ fun MovieList(viewModel: MoviesViewModel) {
                         movie.title.contains(searchQuery.value, ignoreCase = true) &&
                                 (selectedGenre.value == "All" || movie.genre.contains(selectedGenre.value))
                     }
-                    LazyColumn {
-                        items(filteredMovies) { movie ->
-                            MovieCard(movie = movie)
+                    if (filteredMovies.isEmpty()) {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                Text(
+                                    text = "No Search Result! :(",
+                                    style = TextStyle(fontSize = 27.sp, fontWeight = FontWeight.Bold, color = Color.Black),
+                                    textAlign = TextAlign.Center,
+                                     modifier = Modifier.padding(top = 128.dp)
+                                )
+                                Image(
+                                    painter = rememberAsyncImagePainter(model = R.drawable.noresult),
+                                    contentScale = ContentScale.Fit,
+                                    contentDescription = "No Results Image",
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .fillMaxHeight(1f)
+                                        .padding(8.dp),
+                                )
+                            }
+                        }
+                    } else {
+                        LazyColumn {
+                            items(filteredMovies) { movie ->
+                                val isVisible =
+                                    movie.title.contains(searchQuery.value, ignoreCase = true) &&
+                                            (selectedGenre.value == "All" || movie.genre.contains(
+                                                selectedGenre.value
+                                            ))
+                                AnimatedVisibility(
+                                    visible = isVisible,
+                                    enter = slideInVertically(initialOffsetY = { -100 }),
+                                    exit = slideOutHorizontally(targetOffsetX = { -1000 })
+                                ) {
+                                    MovieCard(movie = movie)
+                                }
+                            }
                         }
                     }
                 }
