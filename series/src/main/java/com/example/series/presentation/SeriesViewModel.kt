@@ -23,6 +23,12 @@ class SeriesViewModel @Inject constructor(
         fetchSeries()
     }
 
+    fun getGenres(): List<String> {
+        val series = _series.value.series
+        return series?.flatMap { it.genre }?.distinct() ?: emptyList()
+    }
+
+
     private fun fetchSeries() {
         _series.value = SeriesViewState(isLoading = true)
         viewModelScope.launch {
