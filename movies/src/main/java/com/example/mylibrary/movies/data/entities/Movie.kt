@@ -5,7 +5,6 @@ import androidx.room.PrimaryKey
 
 
 @Entity
-
 data class Movie(
     @PrimaryKey(autoGenerate = true)
     var movieId: Int = 0,

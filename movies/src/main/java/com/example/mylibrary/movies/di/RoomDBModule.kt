@@ -22,7 +22,7 @@ object RoomDBModule {
             appContext,
             MoviesRoomDB::class.java,
             "movies.db"
-        ).build()
+        ).fallbackToDestructiveMigration().build()
 
     @Provides
     @Singleton

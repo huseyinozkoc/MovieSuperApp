@@ -2,6 +2,7 @@ package com.example.mylibrary.movies.di
 
 import com.example.mylibrary.movies.data.repository.MoviesRepositoryImpl
 import com.example.mylibrary.movies.data.source.MoviesRoomDB
+import com.example.mylibrary.movies.data.source.RequestTimeManager
 import com.example.mylibrary.movies.domain.MoviesRepository
 import com.example.mylibrary.movies.domain.source.MoviesLocalDataSource
 import com.example.mylibrary.movies.domain.source.MoviesRemoteDataSource
@@ -21,6 +22,7 @@ object RepositoryModule {
         moviesRemoteDataSource: MoviesRemoteDataSource,
         moviesLocalDataSource: MoviesLocalDataSource,
         moviesRoomDB: MoviesRoomDB,
+        requestTimeManager: RequestTimeManager
     ): MoviesRepository =
-        MoviesRepositoryImpl(moviesRemoteDataSource,moviesLocalDataSource,moviesRoomDB)
+        MoviesRepositoryImpl(moviesRemoteDataSource,moviesLocalDataSource,moviesRoomDB,requestTimeManager)
 }
