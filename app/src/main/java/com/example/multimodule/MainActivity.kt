@@ -22,9 +22,12 @@ import androidx.compose.material3.CardElevation
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -51,7 +54,7 @@ class MainActivity : ComponentActivity() {
                             CardView(
                                 title = "Movies Module",
                                 description = "Click to navigate to Movies Module",
-                                imageResource = com.example.series.R.drawable.error,
+                                imageResource = R.drawable.movies,
                                 onClick = {
                                     val intent =
                                         Intent(this@MainActivity, MoviesActivity::class.java)
@@ -63,7 +66,7 @@ class MainActivity : ComponentActivity() {
                             CardView(
                                 title = "Series Module",
                                 description = "Click to navigate to Series Module",
-                                imageResource = com.example.series.R.drawable.errornetwork,
+                                imageResource = R.drawable.series,
                                 onClick = {
                                     val intent =
                                         Intent(this@MainActivity, SeriesActivity::class.java)
@@ -97,12 +100,12 @@ fun CardView(title: String, description: String, imageResource: Int, onClick: ()
             )
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .align(Alignment.BottomEnd)
                     .padding(16.dp)
             ) {
-                Text(text = title)
+                Text(text = title, color = Color.White, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(text = description)
+                Text(text = description, color = Color.White, fontWeight = FontWeight.Bold)
             }
         }
     }
