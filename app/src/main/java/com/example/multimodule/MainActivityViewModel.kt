@@ -6,8 +6,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
+import com.example.mylibrary.movies.data.entities.FavMovie
 import com.example.mylibrary.movies.data.entities.Movie
 import com.example.mylibrary.movies.data.source.MoviesDAO
+import com.example.mylibrary.movies.data.source.RequestTimeManager
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,13 +21,19 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val moviesDAO: MoviesDAO,
+    private val requestTimeManager: RequestTimeManager,
 ) : ViewModel() {
 
     private val _movies = MutableStateFlow(listOf<Movie>())
     val movies: StateFlow<List<Movie>> = _movies
 
+
+    private val _favoriteMovies = MutableStateFlow(listOf<FavMovie>())
+    val favoriteMovies: StateFlow<List<FavMovie>> = _favoriteMovies
+
     init {
         fetchMovies()
+        fetchFavoriteMovies()
     }
 
     private fun fetchMovies() = viewModelScope.launch {
@@ -35,4 +43,10 @@ class MainViewModel @Inject constructor(
             _movies.value = moviesList
         }
     }
+    fun fetchFavoriteMovies() = viewModelScope.launch {
+        val allFavoriteMovies = requestTimeManager.getFavoriteMovies()
+        Log.d("MainViewModel", "All favorite movies: $allFavoriteMovies")
+        _favoriteMovies.value = allFavoriteMovies ?: emptyList()
+    }
+
 }

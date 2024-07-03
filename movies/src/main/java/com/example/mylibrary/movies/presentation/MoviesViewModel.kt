@@ -3,7 +3,9 @@ package com.example.mylibrary.movies.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.mylibrary.movies.data.entities.FavMovie
 import com.example.mylibrary.movies.data.entities.Movie
+import com.example.mylibrary.movies.data.source.RequestTimeManager
 import com.example.mylibrary.movies.domain.GetTop100MoviesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MoviesViewModel @Inject constructor(
-    private val getTop100MoviesUseCase: GetTop100MoviesUseCase
+    private val getTop100MoviesUseCase: GetTop100MoviesUseCase,
+    val requestTimeManager: RequestTimeManager
 ) : ViewModel() {
 
     private val _movies = MutableStateFlow(MoviesViewState())
@@ -51,6 +54,30 @@ class MoviesViewModel @Inject constructor(
             }
         }
     }
+
+
+
+
+
+
+    fun onFavoriteClick(movie: FavMovie) {
+        viewModelScope.launch {
+            val favoriteMovies = requestTimeManager.getFavoriteMovies() ?: emptyList()
+            if (favoriteMovies.contains(movie)) {
+                requestTimeManager.deleteFavoriteMovie(movie)
+            } else {
+                requestTimeManager.storeFavoriteMovies(movie)
+            }
+        }
+    }
+
+
+
+
+
+
+
+
 }
 
 

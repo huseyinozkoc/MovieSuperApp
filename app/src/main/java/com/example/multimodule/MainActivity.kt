@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -42,6 +43,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.lifecycleScope
 import coil.compose.rememberAsyncImagePainter
 import com.example.multimodule.ui.theme.MultiModuleTheme
+import com.example.mylibrary.movies.data.entities.FavMovie
 import com.example.mylibrary.movies.data.entities.Movie
 import com.example.mylibrary.movies.presentation.MoviesActivity
 import com.example.series.presentation.SeriesActivity
@@ -56,14 +58,15 @@ import kotlinx.coroutines.flow.*
 class MainActivity : ComponentActivity() {
 
     //val viewModel: MainViewModel = hiltViewModel()
-    //private val viewModel: MainViewModel by viewModels()
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val viewModel: MainViewModel = hiltViewModel()
+            //val viewModel: MainViewModel = hiltViewModel()
             val movies = remember { mutableStateOf(listOf<Movie>()) }
+            val favoriteMovies = remember { mutableStateOf(listOf<FavMovie>()) }
 
             LaunchedEffect(viewModel.movies) {
                 viewModel.movies
@@ -77,6 +80,25 @@ class MainActivity : ComponentActivity() {
                     }
                     .collect()
             }
+
+            LaunchedEffect(viewModel.favoriteMovies) {
+                viewModel.favoriteMovies
+                    .onEach { newFavoriteMovies ->
+                        Log.d("MainActivity", "New favorite movies: $newFavoriteMovies")
+                        favoriteMovies.value = newFavoriteMovies
+                    }
+                    .catch { exception ->
+                        // Handle the exception here
+                        Log.e("MainActivity", "Error occurred: ${exception.message}")
+                    }
+                    .collect()
+            }
+
+
+
+
+
+
             MultiModuleTheme {
 
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
@@ -122,10 +144,34 @@ class MainActivity : ComponentActivity() {
                                 }
                             }
                         }
+
+                        if (favoriteMovies.value.isNotEmpty()) {
+                            item {
+                                Text(
+                                    text = "Favorite Movies",
+                                    fontSize = 24.sp,
+                                    modifier = Modifier.padding(start = 16.dp),
+                                    fontWeight = FontWeight.Bold
+                                )
+                                LazyRow {
+                                    items(favoriteMovies.value.size) { index ->
+                                        val favMovie = favoriteMovies.value[index]
+                                        FavMovieCardView(favMovie, onClick = {})
+                                    }
+                                }
+                            }
+                        }
+
+
                     }
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.fetchFavoriteMovies()
     }
 }
 
@@ -161,6 +207,27 @@ fun CardView(title: String, description: String, imageResource: Int, onClick: ()
 
 @Composable
 fun MovieCardView(movie: Movie, onClick: () -> Unit) {
+    Card(
+        modifier = Modifier
+            .width(200.dp)
+            .height(275.dp)
+            .padding(8.dp)
+            .clickable(onClick = onClick),
+        shape = RoundedCornerShape(16.dp)
+    ) {
+        Box {
+            Image(
+                painter = rememberAsyncImagePainter(model = movie.image),
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
+        }
+    }
+}
+
+@Composable
+fun FavMovieCardView(movie: FavMovie, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .width(200.dp)

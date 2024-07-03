@@ -27,11 +27,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -57,6 +60,7 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.mylibrary.movies.R
+import com.example.mylibrary.movies.data.entities.FavMovie
 import com.example.mylibrary.movies.data.entities.Movie
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -175,7 +179,7 @@ fun MovieList(viewModel: MoviesViewModel) {
                                     enter = slideInVertically(initialOffsetY = { -100 }),
                                     exit = slideOutHorizontally(targetOffsetX = { -1000 })
                                 ) {
-                                    MovieCard(movie = movie)
+                                    MovieCard(movie = movie,viewModel)
                                 }
                             }
                         }
@@ -216,7 +220,8 @@ fun MovieList(viewModel: MoviesViewModel) {
 }
 
 @Composable
-fun MovieCard(movie: Movie) {
+fun MovieCard(movie: Movie,viewModel: MoviesViewModel) {
+    val favoriteMovies by viewModel.requestTimeManager.favoriteMoviesFlow.collectAsState(initial = emptyList())
     Card(
         modifier = Modifier.padding(8.dp),
         shape = RoundedCornerShape(8.dp),
@@ -265,6 +270,30 @@ fun MovieCard(movie: Movie) {
                     color = Color.Black,
                     modifier = Modifier.align(Alignment.Center),
                     fontWeight = FontWeight.Bold
+                )
+            }
+            IconButton(onClick = {
+                val favMovie = FavMovie(
+                    movieId = movie.movieId,
+                    rank = movie.rank,
+                    title = movie.title,
+                    description = movie.description,
+                    image = movie.image,
+                    big_image = movie.big_image,
+                    genre = movie.genre,
+                    thumbnail = movie.thumbnail,
+                    rating = movie.rating,
+                    id = movie.id,
+                    year = movie.year,
+                    imdbid = movie.imdbid,
+                    imdb_link = movie.imdb_link
+                )
+                viewModel.onFavoriteClick(favMovie)
+            }, modifier = Modifier.align(Alignment.TopEnd)) {
+                Icon(
+                    imageVector = if (favoriteMovies?.any { it.movieId == movie.movieId } == true) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                    contentDescription = "Favorite Icon",
+                    tint = if (favoriteMovies?.any { it.movieId == movie.movieId } == true) Color.Red else Color.White
                 )
             }
         }

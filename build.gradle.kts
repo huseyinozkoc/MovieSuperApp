@@ -7,4 +7,6 @@ plugins {
     //Hilt
     id("com.google.dagger.hilt.android") version "2.48" apply false
     alias(libs.plugins.android.library) apply false
+
+    id ("org.jetbrains.kotlin.plugin.serialization") version "1.5.30" apply true
 }

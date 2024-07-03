@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
+    id ("org.jetbrains.kotlin.plugin.serialization") version "1.5.30" apply true
 }
 
 android {
@@ -134,4 +135,6 @@ dependencies {
 
     //Lottie
     implementation(libs.lottie.compose)
+
+    implementation (libs.kotlinx.serialization.json)
 }
