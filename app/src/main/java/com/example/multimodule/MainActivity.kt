@@ -154,8 +154,9 @@ class MainActivity : ComponentActivity() {
                                     fontWeight = FontWeight.Bold
                                 )
                                 LazyRow {
-                                    items(favoriteMovies.value.size) { index ->
-                                        val favMovie = favoriteMovies.value[index]
+                                    val reversedFavoriteMovies = favoriteMovies.value.reversed()
+                                    items(reversedFavoriteMovies.size) { index ->
+                                        val favMovie = reversedFavoriteMovies[index]
                                         FavMovieCardView(favMovie, onClick = {})
                                     }
                                 }
