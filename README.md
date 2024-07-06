@@ -2,14 +2,7 @@
 - [📒 Table of Contents](#-table-of-contents)
 - [📍 Overview](#-overview)
 - [🚀 Screenshots](#-Screenshots)
--  [🧩 Modules](#-modules)
-- [⚙️ Gradle Dependencies](#-features)
-- [📂 Project Structure](#project-structure)
-- [🗺 Firebase Console ](#-getting-started)
-- [🤝 Contributing](#-contributing)
-- [📄 License](#-license)
-- [👏 Acknowledgments](#-acknowledgments)
-
+-  [🧩Description](#-Description)
 ---
 
 ## 📍 Overview
@@ -49,3 +42,10 @@ Create your own collection of favorite movies and series. Simply tap the favorit
 **All Screen Of The  IMDb Top 100 Movies and Series App**
 
 ---
+
+## 🧩Description
+
+There are clearly two modules in the application. These two modules are designed to work as independent applications and work completely separate from each other. The Movies module is designed as a separate app to completely manage the movies-related side of the application. In addition, the Series module is an independent module that works as a completely separate application in itself. These two modules are gathered under a single App module. You can also see certain representations as a result of the operations performed in these two modules in the App module.
+
+
+
