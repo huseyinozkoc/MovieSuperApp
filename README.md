@@ -36,13 +36,10 @@ Create your own collection of favorite movies and series. Simply tap the favorit
 
 ## 🚀Screenshots
 
-| Main Screen |  Main Screen | Movies Screen | Movies Screen |
-:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
- ![1](https://github.com/huseyinozkoc/MovieSuperApp/assets/48124105/6a22f589-401d-4f6a-93b3-c9e9dd79ff9d) |  ![2](https://github.com/huseyinozkoc/MovieSuperApp/assets/48124105/82735251-62ac-4759-bfc1-55bebd7a44f3) |![3](https://github.com/huseyinozkoc/MovieSuperApp/assets/48124105/68ffc32e-91b3-4c18-b739-cc7f78bf4fc0) | ![4](https://github.com/huseyinozkoc/MovieSuperApp/assets/48124105/037677ce-be1b-4acd-a557-9d49eba0c5ee) |
+| Main Screen |  Main Screen | Movies Screen | Movies Screen | Search Not Found |
+:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
+ ![1](https://github.com/huseyinozkoc/MovieSuperApp/assets/48124105/6a22f589-401d-4f6a-93b3-c9e9dd79ff9d) |  ![2](https://github.com/huseyinozkoc/MovieSuperApp/assets/48124105/82735251-62ac-4759-bfc1-55bebd7a44f3) |![3](https://github.com/huseyinozkoc/MovieSuperApp/assets/48124105/68ffc32e-91b3-4c18-b739-cc7f78bf4fc0) | ![4](https://github.com/huseyinozkoc/MovieSuperApp/assets/48124105/037677ce-be1b-4acd-a557-9d49eba0c5ee) |  ![5](https://github.com/huseyinozkoc/MovieSuperApp/assets/48124105/29fca10e-33a0-4a9c-9aa2-bef63cecdf2a)   |
 
-| Search Not Found |
-:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
- ![5](https://github.com/huseyinozkoc/MovieSuperApp/assets/48124105/29fca10e-33a0-4a9c-9aa2-bef63cecdf2a) |  
 
 **All Screen Of The  IMDb Top 100 Movies and Series App**
 
