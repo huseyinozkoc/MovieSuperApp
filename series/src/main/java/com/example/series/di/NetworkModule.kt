@@ -2,6 +2,7 @@ package com.example.series.di
 
 import android.content.Context
 import com.chuckerteam.chucker.api.ChuckerInterceptor
+import com.example.series.common.Constants
 import com.example.series.data.SeriesService
 import dagger.Module
 import dagger.Provides
@@ -26,8 +27,8 @@ object NetworkModule {
             .addInterceptor(ChuckerInterceptor(context))
             .addInterceptor { chain ->
                 val request = chain.request().newBuilder()
-                    .addHeader("x-rapidapi-key", "ddd6fda6f2msh4e9ac647b878f41p193358jsn1cbf33278007")
-                    .addHeader("x-rapidapi-host", "imdb-top-100-movies.p.rapidapi.com")
+                    .addHeader(Constants.X_RAPIDAPI_KEY, Constants.RAPID_API_KEY_VALUE)
+                    .addHeader(Constants.X_RAPIDAPI_HOST, Constants.RAPID_API_HOST_VALUE)
                     .build()
                 chain.proceed(request)
             }
@@ -37,13 +38,15 @@ object NetworkModule {
     @Provides
     @Singleton
     @Named("SeriesRetrofit")
-    fun provideRetrofitForSeries(@Named("SeriesOkHttp") okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
-        .baseUrl("https://imdb-top-100-series.p.rapidapi.com/")
-        .client(okHttpClient)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
+    fun provideRetrofitForSeries(@Named("SeriesOkHttp") okHttpClient: OkHttpClient): Retrofit =
+        Retrofit.Builder()
+            .baseUrl(Constants.BASE_URL)
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
 
     @Provides
     @Singleton
-    fun provideSeriesService(@Named("SeriesRetrofit") retrofit: Retrofit): SeriesService = retrofit.create(SeriesService::class.java)
+    fun provideSeriesService(@Named("SeriesRetrofit") retrofit: Retrofit): SeriesService =
+        retrofit.create(SeriesService::class.java)
 }
